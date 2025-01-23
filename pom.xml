@@ -13,6 +13,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <vertx.version>4.5.6</vertx.version>
+        <proto.version>1.50.2</proto.version>
     </properties>
 
     <dependencies>
@@ -31,6 +32,11 @@
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web-client</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-grpc-client</artifactId>
             <version>${vertx.version}</version>
         </dependency>
 
@@ -65,64 +71,30 @@
             <artifactId>protobuf-java</artifactId>
             <version>3.19.1</version>
         </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+            <version>${proto.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-api</artifactId>
+            <version>${proto.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-core</artifactId>
+            <version>${proto.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <version>${proto.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zh.grpc</groupId>
+            <artifactId>grpc-lib</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-<!--            <plugin>-->
-<!--                <groupId>org.xolstice.maven.plugins</groupId>-->
-<!--                <artifactId>protobuf-maven-plugin</artifactId>-->
-<!--                <version>0.6.1</version>-->
-<!--                <configuration>-->
-<!--                    <protocArtifact>com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}</protocArtifact>-->
-<!--                    <pluginId>grpc-java</pluginId>-->
-<!--                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>-->
-<!--                    <protocPlugins>-->
-<!--                        <protocPlugin>-->
-<!--                            <id>vertx-grpc-protoc-plugin2</id>-->
-<!--                            <groupId>io.vertx</groupId>-->
-<!--                            <artifactId>vertx-grpc-protoc-plugin2</artifactId>-->
-<!--                            <version>${stack.version}</version>-->
-<!--                            <mainClass>io.vertx.grpc.plugin.VertxGrpcGenerator</mainClass>-->
-<!--                        </protocPlugin>-->
-<!--                    </protocPlugins>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>compile</id>-->
-<!--                        <configuration>-->
-<!--                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>-->
-<!--                            <clearOutputDirectory>false</clearOutputDirectory>-->
-<!--                        </configuration>-->
-<!--                        <goals>-->
-<!--                            <goal>compile</goal>-->
-<!--                            <goal>compile-custom</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-
-            <plugin>
-                <groupId>org.xolstice.maven.plugins</groupId>
-                <artifactId>protobuf-maven-plugin</artifactId>
-                <version>0.6.1</version>
-
-                <configuration><!-- proto文件目录 -->
-                    <protoSourceRoot>${project.basedir}/src/main/resources/proto</protoSourceRoot>
-                    <!-- 生成的Java文件目录 -->
-                    <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
-                    <clearOutputDirectory>false</clearOutputDirectory>
-                    <!--<outputDirectory>${project.build.directory}/generated-sources/protobuf</outputDirectory>-->
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>test-compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>

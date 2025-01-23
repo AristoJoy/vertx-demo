@@ -1,5 +1,6 @@
 package com.zh.vertx;
 
+import com.zh.vertx.verticle.GrpcCaller;
 import com.zh.vertx.verticle.MainVerticle;
 import com.zh.vertx.verticle.factory.SpringVerticleFactory;
 import io.vertx.core.DeploymentOptions;
@@ -27,19 +28,19 @@ public class Main {
         stopWatch.start();
         Vertx vertx = Vertx.vertx();
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
-        VerticleFactory verticleFactory = context.getBean(SpringVerticleFactory.class);
-        vertx.registerVerticleFactory(verticleFactory);
-
-        DeploymentOptions deploymentOptions = new DeploymentOptions();
-        deploymentOptions.setWorker(true).setInstances(CpuCoreSensor.availableProcessors());
-        vertx.deployVerticle(verticleFactory.prefix() + ":" + MainVerticle.class.getName(), deploymentOptions, result -> {
-            if (result.succeeded()) {
-                stopWatch.stop();
-                log.info("Verticle deployed in {} ms", stopWatch.getTotalTimeMillis());
-            } else {
-                log.error("Failed to deploy verticle", result.cause());
-            }
-        });
+//        VerticleFactory verticleFactory = context.getBean(SpringVerticleFactory.class);
+//        vertx.registerVerticleFactory(verticleFactory);
+//
+//        DeploymentOptions deploymentOptions = new DeploymentOptions();
+//        deploymentOptions.setWorker(true).setInstances(CpuCoreSensor.availableProcessors());
+//        vertx.deployVerticle(verticleFactory.prefix() + ":" + MainVerticle.class.getName(), deploymentOptions, result -> {
+//            if (result.succeeded()) {
+//                stopWatch.stop();
+//                log.info("Verticle deployed in {} ms", stopWatch.getTotalTimeMillis());
+//            } else {
+//                log.error("Failed to deploy verticle", result.cause());
+//            }
+//        });
 
 //        EventBus eventBus = vertx.eventBus();
 //
@@ -56,39 +57,41 @@ public class Main {
 //        eventBus.publish("vertx.main", "Test publish");
 //        eventBus.send("vertx.main", "Test publish");
 
-        HttpServer server = vertx.createHttpServer();
-        server.requestHandler(request -> {
-            log.info("Received request: {}", request.body().toString());
-//            log.info("request headers: {}", request.headers());
-            log.info("request version: {}", request.version());
-            log.info("request method: {}", request.method());
-            log.info("request uri: {}", request.uri());
-            log.info("request absoluteURI: {}", request.absoluteURI());
-            log.info("request path: {}", request.path());
-            log.info("request query: {}", request.query());
+//        HttpServer server = vertx.createHttpServer();
+//        server.requestHandler(request -> {
+//            log.info("Received request: {}", request.body().toString());
+////            log.info("request headers: {}", request.headers());
+//            log.info("request version: {}", request.version());
+//            log.info("request method: {}", request.method());
+//            log.info("request uri: {}", request.uri());
+//            log.info("request absoluteURI: {}", request.absoluteURI());
+//            log.info("request path: {}", request.path());
+//            log.info("request query: {}", request.query());
+//
+//
+//            Buffer totalBuffer = Buffer.buffer();
+//
+//            request.handler(buffer -> {
+//                System.out.println("I have received a chunk of the body of length " + buffer.length());
+//                totalBuffer.appendBuffer(buffer);
+//            });
+//
+//            request.endHandler(v -> {
+//                System.out.println("Full body received, length = " + totalBuffer.length());
+//            });
+//
+//            Cookie othercookie = request.getCookie("othercookie");
+//            if (othercookie != null) {
+//                log.info("Received cookie with name {} and value {}", othercookie.getName(), othercookie.getValue());
+//            }
+//
+//            request.response().addCookie(Cookie.cookie("othercookie", "somevalue")).end("Hello World");
+//
+//        });
+//        server.listen(8080, "localhost");
 
 
-            Buffer totalBuffer = Buffer.buffer();
-
-            request.handler(buffer -> {
-                System.out.println("I have received a chunk of the body of length " + buffer.length());
-                totalBuffer.appendBuffer(buffer);
-            });
-
-            request.endHandler(v -> {
-                System.out.println("Full body received, length = " + totalBuffer.length());
-            });
-
-            Cookie othercookie = request.getCookie("othercookie");
-            if (othercookie != null) {
-                log.info("Received cookie with name {} and value {}", othercookie.getName(), othercookie.getValue());
-            }
-
-            request.response().addCookie(Cookie.cookie("othercookie", "somevalue")).end("Hello World");
-
-        });
-        server.listen(8080, "localhost");
-
-
+        GrpcCaller caller = context.getBean(GrpcCaller.class);
+        caller.grpcCall(vertx);
     }
 }
